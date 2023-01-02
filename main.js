@@ -3,6 +3,7 @@ const fs = require("fs-jetpack")
 const path = require("path")
 const yaml = require("yaml")
 const express = require("express")
+const proxyTo = require("express-http-proxy")
 
 const buttonText = {
     idle: "$(play) Start",
@@ -60,13 +61,29 @@ const startServer = async () => {
     app = express()
     port = config.port ?? 45067
     for (const source of config.sources) {
-        const { dir, headers = {} } = source
-        console.log("adding", dir)
+        const { dir, proxy, headers = {} } = source
+        console.log("adding", dir ?? proxy)
 
-        const router = express.static(
-            path.resolve(sourceFolder.uri.fsPath, dir),
-            setHeaders(config.headers, headers)
-        )
+        const router =
+            (dir !== undefined)
+            ? express.static(
+                path.resolve(sourceFolder.uri.fsPath, dir),
+                setHeaders(config.headers, headers)
+            )
+            : proxyTo(
+                proxy,
+                {
+                    userResHeaderDecorator(headers) {
+                        return {
+                            ...headers,
+                            ...Object.fromEntries([
+                                ...Object.entries(config.headers),
+                                ...Object.entries(headers),
+                            ])
+                        }
+                    }
+                }
+            )
         app.use(router)
     }
     server = app.listen(
