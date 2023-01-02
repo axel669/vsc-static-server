@@ -1,0 +1,23 @@
+{
+  "name": "static-serve",
+  "version": "0.1.0",
+  "publisher": "axel669",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "displayName": "Axel's Static Server",
+  "activationEvents": [
+    "*"
+  ],
+  "description": "",
+  "main": "main.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "fs-jetpack": "^5.1.0",
+    "yaml": "^2.2.0"
+  }
+}
