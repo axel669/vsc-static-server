@@ -1,3 +1,6 @@
+0.1.2
+- added node_modules back into vsix package. it didn't work
+
 0.1.1
 - added proxy option
 - added docs
