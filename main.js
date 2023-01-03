@@ -29,6 +29,27 @@ const setHeaders = (global = {}, local = {}) => {
 
     return { setHeaders }
 }
+const createProxy = (proxy, global = {}, local = {}) => {
+    const url = new URL(proxy)
+    const { origin, pathname } = url
+    return proxyTo(
+        origin,
+        {
+            proxyReqPathResolver(req) {
+                return `${pathname}${req.path}`
+            },
+            userResHeaderDecorator(headers) {
+                return {
+                    ...headers,
+                    ...Object.fromEntries([
+                        ...Object.entries(global),
+                        ...Object.entries(local),
+                    ])
+                }
+            }
+        }
+    )
+}
 const startServer = async () => {
     state = "init"
     button.text = "Initializing..."
@@ -70,20 +91,21 @@ const startServer = async () => {
                 path.resolve(sourceFolder.uri.fsPath, dir),
                 setHeaders(config.headers, headers)
             )
-            : proxyTo(
-                proxy,
-                {
-                    userResHeaderDecorator(headers) {
-                        return {
-                            ...headers,
-                            ...Object.fromEntries([
-                                ...Object.entries(config.headers),
-                                ...Object.entries(headers),
-                            ])
-                        }
-                    }
-                }
-            )
+            : createProxy(proxy, config.headers, headers)
+            // : proxyTo(
+            //     proxy,
+            //     {
+            //         userResHeaderDecorator(headers) {
+            //             return {
+            //                 ...headers,
+            //                 ...Object.fromEntries([
+            //                     ...Object.entries(config.headers),
+            //                     ...Object.entries(headers),
+            //                 ])
+            //             }
+            //         }
+            //     }
+            // )
         app.use(router)
     }
     server = app.listen(
@@ -133,5 +155,7 @@ module.exports = {
 
         button.text = buttonText.idle
         button.show()
+
+        console.trace("hi")
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "static-serve",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "publisher": "axel669",
   "engines": {
     "vscode": "^1.0.0"
@@ -10,12 +10,15 @@
     "*"
   ],
   "description": "",
-  "main": "main.js",
-  "scripts": {},
+  "main": "dist/main.js",
+  "scripts": {
+    "bundle": "esbuild main.js --bundle --outfile=dist/main.js --external:vscode --platform=node"
+  },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "esbuild": "^0.16.13",
     "express": "^4.18.2",
     "express-http-proxy": "^1.6.3",
     "fs-jetpack": "^5.1.0",

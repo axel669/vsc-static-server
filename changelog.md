@@ -1,3 +1,6 @@
+0.1.3
+- proxy now works as expected with paths provided in the URL
+
 0.1.2
 - added node_modules back into vsix package. it didn't work
 
