@@ -36,7 +36,10 @@ const createProxy = (proxy, global = {}, local = {}) => {
         origin,
         {
             proxyReqPathResolver(req) {
-                return `${pathname}${req.path}`
+                const [path, query] = req.url.split("?")
+                const newPath = `${pathname}/${path}`.replace(/\/+/g, "/")
+                const q = (query === undefined) ? "" : `?${query}`
+                return `${newPath}${q}`
             },
             userResHeaderDecorator(headers) {
                 return {
@@ -52,7 +55,6 @@ const createProxy = (proxy, global = {}, local = {}) => {
 }
 const startServer = async () => {
     state = "init"
-    button.text = "Initializing..."
 
     const [sourceFolder] = vscode.workspace.workspaceFolders ?? []
 
@@ -92,20 +94,6 @@ const startServer = async () => {
                 setHeaders(config.headers, headers)
             )
             : createProxy(proxy, config.headers, headers)
-            // : proxyTo(
-            //     proxy,
-            //     {
-            //         userResHeaderDecorator(headers) {
-            //             return {
-            //                 ...headers,
-            //                 ...Object.fromEntries([
-            //                     ...Object.entries(config.headers),
-            //                     ...Object.entries(headers),
-            //                 ])
-            //             }
-            //         }
-            //     }
-            // )
         app.use(router)
     }
     server = app.listen(
@@ -155,7 +143,5 @@ module.exports = {
 
         button.text = buttonText.idle
         button.show()
-
-        console.trace("hi")
     }
 }

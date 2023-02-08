@@ -1,6 +1,6 @@
 {
   "name": "static-serve",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "publisher": "axel669",
   "engines": {
     "vscode": "^1.0.0"

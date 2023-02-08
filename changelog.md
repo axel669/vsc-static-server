@@ -1,3 +1,7 @@
+## 0.1.4
+- fixed bug where proxy wouldn't work on top level domain correctly
+- fixed bug where proxy wouldn't forward query params
+
 0.1.3
 - proxy now works as expected with paths provided in the URL
 
