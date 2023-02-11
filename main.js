@@ -84,8 +84,13 @@ const startServer = async () => {
     app = express()
     port = config.port ?? 45067
     for (const source of config.sources) {
-        const { dir, proxy, headers = {} } = source
-        console.log("adding", dir ?? proxy)
+        const {
+            dir,
+            proxy,
+            route = "/",
+            headers = {}
+        } = source
+        console.log("adding", dir ?? proxy, "@", route)
 
         const router =
             (dir !== undefined)
@@ -94,7 +99,7 @@ const startServer = async () => {
                 setHeaders(config.headers, headers)
             )
             : createProxy(proxy, config.headers, headers)
-        app.use(router)
+        app.use(route, router)
     }
     server = app.listen(
         port,

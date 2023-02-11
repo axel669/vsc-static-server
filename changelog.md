@@ -1,3 +1,6 @@
+## 0.1.5
+- added optional route param to sources
+
 ## 0.1.4
 - fixed bug where proxy wouldn't work on top level domain correctly
 - fixed bug where proxy wouldn't forward query params
